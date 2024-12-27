@@ -1,5 +1,5 @@
-#include "gpio.h"
 #include "serial.h"
+#include "command.h"
 #include <string.h>
 char buff[16];
 unsigned short int index=0;
@@ -19,6 +19,7 @@ unsigned char data;
 			{
 				serial_putc(buff[i]);
 			}
+			execute_cmd(buff);
 			memset(buff,'\0',sizeof(buff));
 			index=0;
 			serial_putc('\n');
