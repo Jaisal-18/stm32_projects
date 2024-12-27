@@ -32,6 +32,7 @@ void gpio_binary_on(void)
 		delay(1);
 		JAI_GPTR->ODR&=~(1<<i);
 		delay(1);
+		i++;
 	}
 }
 void gpio_binary_off(void)
