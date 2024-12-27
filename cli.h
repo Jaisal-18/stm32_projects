@@ -1,0 +1,1 @@
+void cln_fun(void);
