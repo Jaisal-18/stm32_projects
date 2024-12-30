@@ -16,7 +16,7 @@ command comd_list[] = {
     {"off", led_off}
 };
 
-void execute_command(const char *input)
+void execute_command( char *input)
 {
     for (int i = 0; i < 2; i++) 
 	{
