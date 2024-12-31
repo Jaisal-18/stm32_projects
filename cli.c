@@ -32,10 +32,7 @@ unsigned char data;
 			{
 				 serial_putc('\n');
 			   serial_putc('\r');
-				 serial_putc('f');
-				 serial_putc('u');
-				 serial_putc('l');
-				 serial_putc('l');
+				 serial_gets("buffer is full");
 				 memset(buff,'\0',sizeof(buff));
 				 index=0;
 				 serial_putc('\n');

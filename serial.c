@@ -23,3 +23,10 @@ unsigned char serial_getc(void)//GETC
 	while(!(JAI_UPTR->SR & (1<<5)));//WAITING FOR RECEIVE BUFFER TO BE EMPTY
 	return JAI_UPTR->DR;
 }
+void serial_gets(unsigned char * data)
+{
+	while(*data)
+	{
+		serial_putc(*data++);
+	}
+}
