@@ -1,43 +1,33 @@
-#include "serial.h"
+#include "cli.h"
 #include "command.h"
+#include "serial.h"
 #include <string.h>
-char buff[16];
-unsigned short int index=0;
-void cln_fun(void)
+#include <stdio.h>
+void cli_parse_and_execute(char *input)
 {
-unsigned char data;
-	while(1)
-	{
-		data=serial_getc();
-		serial_putc(data);
-		if(data=='\n'||data=='\r')
+		//serial_puts("\r\nfrom cli function1\r\n");//for debugging;
+    char command[16] = {0};    // Main command
+    char subcommand[16] = {0}; // Subcommand
+		sscanf(input, "%s %s", command, subcommand);// Parse the input into command and subcommand
+		if(strcasecmp(command,"led")==0)
 		{
-			buff[index+1]='\0';
-			serial_putc('\n');
-			serial_putc('\r');
-			for(int i=0;i<index;i++)
+			if(strcasecmp(subcommand,"on")==0)
 			{
-				serial_putc(buff[i]);
+				execute_cmd("on");
+				serial_puts("\r\nLED IS ON\r\n");
 			}
-			execute_cmd(buff);
-			memset(buff,'\0',sizeof(buff));
-			index=0;
-			serial_putc('\n');
-			serial_putc('\r');
+			else if(strcasecmp(subcommand,"off")==0)
+			{
+				execute_cmd("off");
+				serial_puts("\r\nLED IS TURNED OFF\r\n");
+			}
+			else
+			{
+				serial_puts("\r\nUNKOWN SUBCOMMAND\r\n");
+			}
 		}
 		else
 		{
-			buff[index++]=data;
-			if(index>=sizeof(buff))
-			{
-				 serial_putc('\n');
-			   serial_putc('\r');
-				 serial_gets("buffer is full");
-				 memset(buff,'\0',sizeof(buff));
-				 index=0;
-				 serial_putc('\n');
-				 serial_putc('\r');
-			}
+			serial_puts("\r\nUNKOWN COMMAND\r\n");
 		}
-	}
 }

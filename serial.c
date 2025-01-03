@@ -13,17 +13,17 @@ void serial_init(void)
 	JAI_GPTR->CRH|=(4<<8);//PIN 10 IN FLOAT INPUT MODE;(RECEIVE)
 }
 
-void serial_putc(unsigned char data)//PUTC
+void serial_putc(unsigned char data)//PUTC//write
 {
 	while(!(JAI_UPTR->SR & (1<<7)));//WAITING FOR BUFFER TO BE EMPTY
 	JAI_UPTR->DR=data;
 }
-unsigned char serial_getc(void)//GETC
+unsigned char serial_getc(void)//GETC//read
 {
 	while(!(JAI_UPTR->SR & (1<<5)));//WAITING FOR RECEIVE BUFFER TO BE EMPTY
 	return JAI_UPTR->DR;
 }
-void serial_gets(unsigned char * data)
+void serial_puts(unsigned char * data)
 {
 	while(*data)
 	{
