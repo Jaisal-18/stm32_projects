@@ -1,15 +1,17 @@
 #include "shell.h"
-#include <stdio.h>
-#include <string.h>
 
+// Global variables
 struct shellcontent s_shell;
+scommand command_array[] = {{"led", display, "this is led command"},{"exit",shell_exit,"a exit function"}};
+int casize = sizeof(command_array)/sizeof(command_array[0]);
 
+// Internal helper functions
 static bool shell_is_initialize(void)
 {
     return s_shell.send_char != NULL;
 }
 
-void shell_send_char(char c)
+static void shell_send_char(char c)
 {
     if (shell_is_initialize())
     {
@@ -17,6 +19,7 @@ void shell_send_char(char c)
     }
 }
 
+// Shell functionality
 void shell_echo(char c)
 {
     if (c == '\n')
@@ -47,8 +50,52 @@ void shell_boot(int (*send2_char_func)(char))
     shell_put_line(SHELLPROMT);
 }
 
-int send(char c)
+// Command handler
+int display(int argc, char *argv[])
 {
-    putchar(c);
+    shell_put_line("led function\n");
     return 0;
+}
+int shell_exit(int argc,char *argv[])
+{
+        shell_put_line("exit command\n");
+        return 0;
+}
+
+void shell_process_cmd(void)
+{
+    if (s_shell.size == 0)
+    {
+        return;
+    }
+
+    char *argv[256];
+    int size = 0;
+    char *token = strtok(s_shell.buff, " ");
+    while (token != NULL)
+    {
+        argv[size++] = token;
+        token = strtok(NULL, " ");
+    }
+    if (size > 0)
+    {
+        scommand *command = NULL;
+        test_loop(cmd)
+        {
+            if (strcmp(cmd->command, argv[0]) == 0)
+            {
+                command = cmd;
+                break;
+            }
+        }
+
+        if (command)
+        {
+            command->handler(size, argv);
+        }
+        else
+        {
+            shell_put_line("unkown\n");
+        }
+    }
 }
